@@ -39,13 +39,21 @@ class Color
     private $blue;
 
     /**
+     * Count occurrence of current color instance.
+     *
+     * @var int
+     */
+    private $count;
+
+    /**
      * Creates new instance.
      */
-    public function __construct(int $red = 0, int $green = 0, int $blue = 0)
+    public function __construct(int $red = 0, int $green = 0, int $blue = 0, int $count = 0)
     {
         $this->red = $red;
         $this->green = $green;
         $this->blue = $blue;
+        $this->count = $count;
     }
 
     /**
@@ -70,6 +78,22 @@ class Color
     public function getBlue(): int
     {
         return $this->blue;
+    }
+
+    /**
+     * Get count value.  (MMMM)
+     */
+    public function getCount(): int
+    {
+        return $this->count;
+    }
+
+    /**
+     * Set count value.
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
     }
 
     /**
