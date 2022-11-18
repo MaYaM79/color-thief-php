@@ -158,7 +158,7 @@ class ColorThief
         int $colorCount = 10,
         int $quality = 10,
         ?array $area = null,
-        string $outputFormat = 'array',
+        string $outputFormat = 'obj',
         $adapter = null
     ): ?array {
         if ($colorCount < 2 || $colorCount > 256) {
@@ -510,7 +510,6 @@ class ColorThief
         //}
 
         $vBox = self::vboxFromHistogram($histo);
-
         /** @var PQueue<VBox> $priorityQueue */
         $priorityQueue = new PQueue(function (VBox $a, VBox $b) {
             return $a->count() <=> $b->count();
@@ -524,13 +523,14 @@ class ColorThief
         $priorityQueue->setComparator(function (VBox $a, VBox $b) {
             return ($a->count() * $a->volume()) <=> ($b->count() * $b->volume());
         });
-
         // next set - generate the median cuts using the (npix * vol) sorting.
         self::quantizeIter($priorityQueue, $maxColors, $histo);
 
         // calculate the actual colors
         $colors = $priorityQueue->map(function (VBox $vbox) {
-            return new Color(...$vbox->avg());
+            $color = new color(...$vbox->avg());
+            $color->setCount($vbox->count(true)); //(MMMM)
+            return $color;
         });
         $colors = array_reverse($colors);
 
